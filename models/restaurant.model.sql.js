@@ -31,7 +31,7 @@ Restaurant.getAll = (result) => {
     //SELECT * FROM restautants
     sql.query("SELECT * FROM restaurants", (err, res) => {
         if (err) {
-            console.log("error", err);
+            console.log("err", err);
             result(err, null);
             return;
         }

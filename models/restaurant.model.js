@@ -28,4 +28,10 @@ updatedAt:{
 
 });
 
+Restaurant.sync({force: false}).then( ()=>{
+    console.log("db existed");
+}).catch((err)=>{
+    console.log("created db");
+})
+
 module.exports = Restaurant;
