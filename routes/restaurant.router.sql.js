@@ -1,47 +1,41 @@
 const express = require("express");
 const router = express.Router();
-const estaurant = require("../models/restaurant.model.sql");
 const Restaurant = require("../models/restaurant.model.sql");
 
-//Insert restaurant to database
-//http://localhost:5000/restaurants
+// INSERT restaurant to database
 router.post("/restaurants", (req, res) => {
-    //Create Restautant instance
     const newRestaurant = new Restaurant({
         name: req.body.name,
         type: req.body.type,
-        imageurl: req.body.imageurl
+        image: req.body.image
+    });
 
-
-    })
-    //INSERT to DB
-    Restaurant.create(newRestaurant , (err, data) => {
+    // http://localhost:5000/restaurants
+    Restaurant.create(newRestaurant, (err, data) => {
         if (err) {
             res.status(500).send({
-                message: err.message || "Some error accured while inserting the new restaurant"
-            })
-        } else {
-            res.send(data);
-        }
-    })
-})
-//Get all Restaurant
-router.get("/restaurants", (req, res) => {
-    Restaurant.getAll ((err, data) => {
-        if (err) {
-            res.status(500).send({
-                message: err.message ||
-                    "Some error accured while inserting the new restaurant"
-
+                message: err.message || "Some error occurred while inserting the new restaurant"
             });
         } else {
             res.send(data);
         }
+    });
+});
 
-    })
-})
+// Get all restaurants
+router.get("/restaurants", (req, res) => {
+    Restaurant.getAll((err, data) => {
+        if (err) {
+            res.status(500).send({
+                message: err.message || "Some error occurred"
+            });
+        } else {
+            res.send(data);
+        }
+    });
+});
 
-//Get by ID 
+// Get restaurant by ID
 router.get("/restaurants/:id", (req, res) => {
     const restaurantId = req.params.id;
 
@@ -60,55 +54,35 @@ router.get("/restaurants/:id", (req, res) => {
     });
 });
 
-
-//Update
+// Update restaurant
 router.put("/restaurants/:id", (req, res) => {
     const restaurantId = req.params.id;
     const updatedData = req.body; // Assuming the updated data is provided in the request body
 
     Restaurant.updateById(restaurantId, updatedData, (err, data) => {
         if (err) {
-            if (err.message === "Restaurant not found") {
-                res.status(404).send({
-                    message: "Restaurant not found [ID]"
-                });
-            } else {
-                res.status(500).send({
-                    message: err.message || "Some error occurred while updating the restaurant"
-                });
-            }
+            res.status(500).send({
+                message: err.message || "Some error occurred while updating the restaurant"
+            });
         } else {
             res.send(data);
         }
     });
 });
 
-
-//Delete
+// Delete restaurant
 router.delete("/restaurants/:id", (req, res) => {
     const restaurantId = req.params.id;
 
     Restaurant.deleteById(restaurantId, (err, data) => {
         if (err) {
-            if (err.message === "Restaurant not found") {
-                res.status(404).send({
-                    message: "Restaurant not found [ID]"
-                });
-            } else {
-                res.status(500).send({
-                    message: err.message || "Some error occurred while deleting the restaurant"
-                });
-            }
+            res.status(500).send({
+                message: err.message || "Some error occurred while deleting the restaurant"
+            });
         } else {
             res.send(data);
         }
     });
 });
 
-
-
-
-
-
-
-module.exports = router
+module.exports = router;
